@@ -102,7 +102,23 @@ body {
 .player-current-score {
     font-size: 30px;
 }
-
+.final-score {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 520px;
+    width: 160px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Lato';
+    font-size: 18px;
+    font-weight: 100;
+    padding: 10px;
+    color: #555;
+}
+.final-score:focus {
+    outline: none;
+}
 button {
     position: absolute;
     width: 200px;

@@ -9,7 +9,7 @@ GAME RULES:
 
 */
 
-let scores, roundScore, activePlayer, gameRunning, prevDice;
+let scores, roundScore, activePlayer, gameRunning, lastDice;
 
 init();
 
@@ -22,14 +22,19 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     diceDOM.style.display = 'block';
     diceDOM.src = 'dice-' + dice + '.png';
     // update round number if dice NOT 1
-    if (dice !== 1 && !(prevDice[activePlayer] === 6 && dice === 6)){
-      roundScore += dice;
-      document.getElementById('current-' +  activePlayer).textContent = roundScore;
-      prevDice[activePlayer] = dice;
-    } else {
-      prevDice = [0,0];
+    if (dice === 6 && lastDice === 6){
+      scores[activePlayer] = 0;
+      document.getElementById('score-' + activePlayer).textContent = 0;
+      lastDice = 0;
       nextPlayer();
     }
+    else if (dice !== 1){
+      roundScore += dice;
+      document.getElementById('current-' +  activePlayer).textContent = roundScore;
+    } else {
+      nextPlayer();
+    }
+    lastDice = dice;
   }
 });
 
@@ -39,9 +44,15 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     scores[activePlayer] += roundScore;
     //update ui
     document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
-
+    let input = document.querySelector('.final-score').value;
+    let finalScore;
+    if (input) {
+      finalScore = input;
+    } else {
+      finalScore = 100;
+    }
     // player won logic
-    if(scores[activePlayer] >= 20) {
+    if(scores[activePlayer] >= finalScore) {
       document.getElementById('name-' + activePlayer).textContent = 'Winner!';
       document.querySelector('.dice').style.display = 'none';
       document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
@@ -49,7 +60,6 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
       gameRunning = false;
     } else {
       nextPlayer();
-      prevDice = [0,0];
     }
   }
 });
@@ -68,10 +78,10 @@ function nextPlayer () {
 
 function init() {
   scores = [0,0];
-  prevDice = [0,0];
   roundScore = 0;
   activePlayer = 0;
   gameRunning = true;
+
 
   document.querySelector('.dice').style.display = 'none';
 
