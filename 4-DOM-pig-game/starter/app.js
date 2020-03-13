@@ -17,24 +17,26 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
   if (gameRunning) {
     // get random number
     let dice = Math.floor(Math.random() * 6) + 1;
+    let dice2 = Math.floor(Math.random() * 6) + 1;
     // display result
     const diceDOM = document.querySelector('.dice');
+    const diceDOM2 = document.querySelector('.dice2')
     diceDOM.style.display = 'block';
+    diceDOM2.style.display = 'block';
     diceDOM.src = 'dice-' + dice + '.png';
+    diceDOM2.src = 'dice-' + dice2 + '.png';
     // update round number if dice NOT 1
-    if (dice === 6 && lastDice === 6){
+    if (dice === 6 && dice2 === 6){
       scores[activePlayer] = 0;
       document.getElementById('score-' + activePlayer).textContent = 0;
-      lastDice = 0;
       nextPlayer();
     }
-    else if (dice !== 1){
-      roundScore += dice;
+    else if (dice !== 1 && dice2 !== 1){
+      roundScore += dice += dice2;
       document.getElementById('current-' +  activePlayer).textContent = roundScore;
     } else {
       nextPlayer();
     }
-    lastDice = dice;
   }
 });
 
@@ -55,6 +57,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     if(scores[activePlayer] >= finalScore) {
       document.getElementById('name-' + activePlayer).textContent = 'Winner!';
       document.querySelector('.dice').style.display = 'none';
+      document.querySelector('.dice2').style.display = 'none';
       document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
       document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
       gameRunning = false;
@@ -74,6 +77,7 @@ function nextPlayer () {
   document.querySelector('.player-0-panel').classList.toggle('active');
   document.querySelector('.player-1-panel').classList.toggle('active');
   document.querySelector('.dice').style.display = 'none';
+  document.querySelector('.dice2').style.display = 'none';
 };
 
 function init() {
@@ -84,6 +88,7 @@ function init() {
 
 
   document.querySelector('.dice').style.display = 'none';
+  document.querySelector('.dice2').style.display = 'none';
 
   document.getElementById('score-0').textContent = '0';
   document.getElementById('score-1').textContent = '0';
