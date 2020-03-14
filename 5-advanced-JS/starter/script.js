@@ -44,11 +44,11 @@
       if (correct) {
         sc++;
       }
-      return sc; // return 'sc' variable as a result fo anonymous function
+      return sc; // return variable as a result fo anonymous function
     }
   }
 
-  let keepScore = score(); // keepScore is a function with 'sc' variable available due to closure
+  let keepScore = score(); // keepScore is a function with variable in outer function available due to closure
   
   
 
