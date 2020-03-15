@@ -61,7 +61,9 @@ const UIController = (function(){
     inputType: '.add__type',
     inputDescription: '.add__description',
     inputValue: '.add__value',
-    inputBtn: '.add__btn'
+    inputBtn: '.add__btn',
+    incomeContainer: '.income__list',
+    expenseContainer: '.expenses__list'
   }
 
   return {
@@ -71,6 +73,27 @@ const UIController = (function(){
         description: document.querySelector(DOMStrings.inputDescription).value,
         value: document.querySelector(DOMStrings.inputValue).value
       };
+    },
+    addListItem: function(obj, type){
+      // create HTML string with placeholder text
+      let html, newHTML, element;
+
+      if (type === 'inc'){
+        element = DOMStrings.incomeContainer;
+        html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      } else if (type === 'exp'){
+        element = DOMStrings.expenseContainer;
+        html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      }
+
+      // replace placeholder text with some actual data
+      newHTML = html.replace('%id%', obj.id);
+      newHTML = newHTML.replace('%description%', obj.description);
+      newHTML = newHTML.replace('%value%', obj.value);
+
+      // insert html into the DOM
+      document.querySelector(element).insertAdjacentHTML('beforeend', newHTML);
+
     },
 
     getDOMStrings: function() {
@@ -106,7 +129,7 @@ const controller = (function(budgetCtrl, UICtrl){
 
 
     // 3. Add the item to UI
-
+    UICtrl.addListItem(newItem, input.type);
 
     // 4. Calculate the budget
 
