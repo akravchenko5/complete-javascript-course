@@ -67,6 +67,26 @@ const UIController = (function(){
   }
 
   return {
+
+    getDOMStrings: function() {
+      return DOMStrings;
+    },
+
+    clearFields: function() {
+      let fields, fieldsArray;
+      fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue); //list type stored in fields
+      // fields.slice() will not work as the fields is NOT an array, but list
+
+      // Array is a constructor for all arrays, methods are inherit from prototype properties of Array constructor
+      // So to get an array from the list we need to use something like below, and it will return us an array
+      fieldsArray = Array.prototype.slice.call(fields);
+
+      fieldsArray.forEach(function(current, index, array) { // we can pass up to 3 parameters and then can access to them
+        current.value = '';
+      });
+      fieldsArray[0].focus(); //focus back to 'add description' field
+    },
+
     getInput: function() {
       return {
         type: document.querySelector(DOMStrings.inputType).value, // will be either inc or exp
@@ -74,7 +94,7 @@ const UIController = (function(){
         value: document.querySelector(DOMStrings.inputValue).value
       };
     },
-    addListItem: function(obj, type){
+    addListItem: function(obj, type){ // adding item to UI
       // create HTML string with placeholder text
       let html, newHTML, element;
 
@@ -93,11 +113,6 @@ const UIController = (function(){
 
       // insert html into the DOM
       document.querySelector(element).insertAdjacentHTML('beforeend', newHTML);
-
-    },
-
-    getDOMStrings: function() {
-      return DOMStrings;
     }
   };
 
@@ -131,10 +146,13 @@ const controller = (function(budgetCtrl, UICtrl){
     // 3. Add the item to UI
     UICtrl.addListItem(newItem, input.type);
 
-    // 4. Calculate the budget
+    // 4. Clear the fields
+    UICtrl.clearFields();
+
+    // 5. Calculate the budget
 
 
-    // 5. Display the budget on the UI
+    // 6. Display the budget on the UI
 
     
   };
