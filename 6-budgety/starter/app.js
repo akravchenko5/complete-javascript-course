@@ -13,6 +13,14 @@ const budgetController = (function(){
     this.value = value;
   };
 
+  const calculateTotal = function(type) {
+    var sum = 0;
+    data.allItems[type].forEach(function(cur){
+      sum += cur.value;
+    });
+    data.totals[type] = sum;
+  };
+
   const data = {
     allItems: {
       exp: [],
@@ -21,7 +29,9 @@ const budgetController = (function(){
     totals: {
       exp: 0,
       inc: 0
-    }
+    },
+    budget: 0,
+    percentage: -1
   };
 
   return {
@@ -47,7 +57,34 @@ const budgetController = (function(){
       return newItem;
     },
 
-    testing: function(){
+    calculateBudget: function() {
+
+      // calculate total income and expenses
+      calculateTotal('inc');
+      calculateTotal('exp');
+
+      // calculate budget income - expenses
+      data.budget = data.totals.inc - data.totals.exp;
+
+      // calculate percentage of spent income
+      if (data.totals.inc > 0){
+        data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+      } else {
+        data.percentage = -1;
+      }
+
+    },
+
+    getBudget: function() {
+      return {
+        budget: data.budget,
+        totalIncome: data.totals.inc,
+        totalExpenses: data.totals.exp,
+        percentage: data.percentage
+      };
+    },
+
+    testing: function(){ // test the data structure
       console.log(data);
     }
   };
@@ -134,12 +171,16 @@ const controller = (function(budgetCtrl, UICtrl){
   };
 
   const updateBudget = function() {
+    let budget;
 
     // 1. Calculate the budget
+    budgetCtrl.calculateBudget();
 
     // 2. Return budget
+    budget = budgetCtrl.getBudget();
 
     // 3. Display the budget on the UI
+    console.log(budget);
 
   };
 
