@@ -57,6 +57,20 @@ const budgetController = (function(){
       return newItem;
     },
 
+    deleteItem: function(type, id) {
+      
+      let ids, index;
+
+      ids = data.allItems[type].map(function(current){ // array of all ids
+        return current.id;
+      })
+      index = ids.indexOf(id); // find position of passed id through all ids
+
+      if (index !== -1){ // check if id found in ids array
+        data.allItems[type].splice(index, 1); // deleting one element from data structure which
+      }
+    },
+
     calculateBudget: function() {
 
       // calculate total income and expenses
@@ -227,12 +241,21 @@ const controller = (function(budgetCtrl, UICtrl){
   const ctrlDeleteItem = function(event) { // we passing event object as we want to know target element
     let itemID, splitID, type, ID;
 
-    itemID = console.log(event.target.parentNode.parentNode.parentNode.parentNode.id); // DOM upward traversing
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id; // DOM upward traversing
 
     if (itemID) {
+      // inc-0 or exp-0 
       splitID = itemID.split('-');
       type = splitID[0];
       ID = parseInt(splitID[1]);
+
+      // 1. Delete item from data structure
+      budgetCtrl.deleteItem(type, ID);
+
+      // 2. Delete item from UI
+
+      // 3. Update and show new budget
+
     }
 
   };
