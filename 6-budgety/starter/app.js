@@ -146,7 +146,8 @@ const UIController = (function(){
     expenseLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
-    expensesPercentageLabel: '.item__percentage'
+    expensesPercentageLabel: '.item__percentage',
+    dataLabel: '.budget__title--month'
   };
 
   const formatNumber = function(num, type){
@@ -249,6 +250,16 @@ const UIController = (function(){
           cur.textContent = '--'
         }
       });
+    },
+
+    displayMonth: function() {
+      let now, year, month, months;
+      now = new Date();
+      // let christmasDay = new Date(2020, 11, 25) - month started from 0
+      year = now.getFullYear();
+      month = now.getMonth();
+      months = ['January','February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      document.querySelector(DOMStrings.dataLabel).textContent = months[month] + ' ' + year;
     },
 
     displayBudget: function(obj){
@@ -369,6 +380,7 @@ const controller = (function(budgetCtrl, UICtrl){
   return {
     init: function (){
       console.log('Application has started');
+      UICtrl.displayMonth();
       UICtrl.displayBudget({
         budget: 0,
         totalIncome: 0,
