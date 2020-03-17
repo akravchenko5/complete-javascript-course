@@ -45,6 +45,8 @@ var friends = ['Bob', 'Jane', 'Melisa'];
 new Person('John').myFriends(friends);
 */
 
+
+/*
 // ES6
 
 function Person(name){
@@ -58,3 +60,27 @@ Person.prototype.myFriends = function(friends) {
 
 var friends = ['Bob', 'Jane', 'Melisa'];
 new Person('John').myFriends(friends);
+*/
+
+const boxes = document.querySelectorAll('.box');
+
+
+//ES5
+/*
+var boxesArr = Array.prototype.slice.call(boxes);
+
+boxesArr.forEach(function(cur) {
+  cur.style.backgroundColor = 'dodgerblue';
+});
+*/
+
+//ES6
+const boxesArr = Array.from(boxes);
+boxesArr.forEach(cur => cur.style.backgroundColor = 'dodgerblue');
+
+for (const cur of boxesArr){
+  if (cur.className.includes('blue')){
+    continue;
+  }
+  cur.textContent = 'I changed to blue!';
+}
