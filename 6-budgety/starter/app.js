@@ -173,6 +173,12 @@ const UIController = (function(){
      return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
   };
 
+  let nodeListForEach = function(list, callback){
+    for (let index = 0; index < list.length; index++) { // nodeList has length property
+      callback(list[index], index)
+    }
+  };
+
   return {
 
     getDOMStrings: function() { // getting DOM classes from DOMStrings object
@@ -231,17 +237,11 @@ const UIController = (function(){
     displayPercentages: function(percentages){
       let fields = document.querySelectorAll(DOMStrings.expensesPercentageLabel); //nodeList - in DOM tree each element is called node
 
-      let nodeListForEach = function(list, callback){
-        for (let index = 0; index < list.length; index++) { // nodeList has length property
-          callback(list[index], index)
-        }
-      };
-
-      /*
-      when we call nodeListForEach function we passed function(cur, index) callback function, this function is assigned to 'callback' parameter
-      then in nodeListForEach we are looping over our list, and for each iteration the callback function get called with arguments which we
-      specified wen calling, (cur, index) arguments, so then block code inside function(cur, index) going to be executed. We will have access as
-      we passing them with callback(list[i], i). cur = list[i], index = i
+      /**
+      * when we call nodeListForEach function we passed function(cur, index) callback function, this function is assigned to 'callback' parameter
+      * then in nodeListForEach we are looping over our list, and for each iteration the callback function get called with arguments which we
+      * specified wen calling, (cur, index) arguments, so then block code inside function(cur, index) going to be executed. We will have access as
+      * we passing them with callback(list[i], i). cur = list[i], index = i
        */
       nodeListForEach(fields, function(cur, index){ 
         if (percentages[index] > 0){
@@ -260,6 +260,21 @@ const UIController = (function(){
       month = now.getMonth();
       months = ['January','February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
       document.querySelector(DOMStrings.dataLabel).textContent = months[month] + ' ' + year;
+    },
+
+    changedType: function () { //change outline of inputs
+
+      let fields = document.querySelectorAll(
+        DOMStrings.inputType + ',' +
+        DOMStrings.inputDescription + ',' +
+        DOMStrings.inputValue
+      );
+
+      nodeListForEach(fields, function(cur){
+        cur.classList.toggle('red-focus');
+      });
+
+      document.querySelector(DOMStrings.inputBtn).classList.toggle('red');
     },
 
     displayBudget: function(obj){
@@ -295,7 +310,9 @@ const controller = (function(budgetCtrl, UICtrl){
       };
     });
 
-    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem); //// not calling ctrlAddItem, using as callback function
+    
+    document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
   };
 
   const updateBudget = function() {
