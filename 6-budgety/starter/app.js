@@ -145,8 +145,32 @@ const UIController = (function(){
     incomeLabel: '.budget__income--value',
     expenseLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
-    container: '.container'
-  }
+    container: '.container',
+    expensesPercentageLabel: '.item__percentage'
+  };
+
+  const formatNumber = function(num, type){
+    let numSplit, int, dec;
+    /** + or - before numbers
+     * exactly 2 decimals points
+     * coma separated thousands
+     * 2310.2351 -> + 2,310.24
+     * 2000 -> + 2,000.00
+     */
+
+     num = Math.abs(num); // overwriting num variable
+     num = num.toFixed(2); // two decimals, method of the Number.prototype, also doing rounding
+     numSplit = num.split('.');
+     int = numSplit[0];
+     if(int.length > 3){
+       int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); // input 2310, output 2,310
+     }
+
+     dec = numSplit[1];
+     
+     
+     return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+  };
 
   return {
 
@@ -191,7 +215,7 @@ const UIController = (function(){
       // replace placeholder text with some actual data
       newHTML = html.replace('%id%', obj.id);
       newHTML = newHTML.replace('%description%', obj.description);
-      newHTML = newHTML.replace('%value%', obj.value);
+      newHTML = newHTML.replace('%value%', formatNumber(obj.value, type));
 
       // insert html into the DOM
       document.querySelector(element).insertAdjacentHTML('beforeend', newHTML);
@@ -203,10 +227,38 @@ const UIController = (function(){
       el.parentNode.removeChild(el);
     },
 
+    displayPercentages: function(percentages){
+      let fields = document.querySelectorAll(DOMStrings.expensesPercentageLabel); //nodeList - in DOM tree each element is called node
+
+      let nodeListForEach = function(list, callback){
+        for (let index = 0; index < list.length; index++) { // nodeList has length property
+          callback(list[index], index)
+        }
+      };
+
+      /*
+      when we call nodeListForEach function we passed function(cur, index) callback function, this function is assigned to 'callback' parameter
+      then in nodeListForEach we are looping over our list, and for each iteration the callback function get called with arguments which we
+      specified wen calling, (cur, index) arguments, so then block code inside function(cur, index) going to be executed. We will have access as
+      we passing them with callback(list[i], i). cur = list[i], index = i
+       */
+      nodeListForEach(fields, function(cur, index){ 
+        if (percentages[index] > 0){
+          cur.textContent = percentages[index] + '%';
+        } else {
+          cur.textContent = '--'
+        }
+      });
+    },
+
     displayBudget: function(obj){
-      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalIncome;
-      document.querySelector(DOMStrings.expenseLabel).textContent = obj.totalExpenses;
+      let type;
+
+      obj.budget > 0 ? type = 'inc' : type = 'exp';
+
+      document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+      document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalIncome, 'inc');
+      document.querySelector(DOMStrings.expenseLabel).textContent = formatNumber(obj.totalExpenses, 'exp');
       
       if (obj.percentage > 0){
         document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%';
@@ -257,7 +309,7 @@ const controller = (function(budgetCtrl, UICtrl){
     percentages = budgetCtrl.getPercentages();
 
     // 3. Update UI with the new percentages
-    console.log(percentages);
+    UICtrl.displayPercentages(percentages);
 
   };
 
