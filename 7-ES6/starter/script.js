@@ -1,3 +1,4 @@
+/*
 // ES5
 var box5 = {
   color: 'green',
@@ -26,7 +27,7 @@ const box6= {
 };
 
 box6.clickMe();
-
+*/
 
 // ES5
 /*
@@ -61,18 +62,17 @@ Person.prototype.myFriends = function(friends) {
 var friends = ['Bob', 'Jane', 'Melisa'];
 new Person('John').myFriends(friends);
 */
-
+/*
 const boxes = document.querySelectorAll('.box');
 
 
 //ES5
-/*
 var boxesArr = Array.prototype.slice.call(boxes);
 
 boxesArr.forEach(function(cur) {
   cur.style.backgroundColor = 'dodgerblue';
 });
-*/
+
 
 //ES6
 const boxesArr = Array.from(boxes);
@@ -84,3 +84,12 @@ for (const cur of boxesArr){
   }
   cur.textContent = 'I changed to blue!';
 }
+
+*/
+
+const h = document.querySelector('h1');
+const boxes = document.querySelectorAll('.box');
+
+const all = [h, ...boxes];
+
+Array.from(all).forEach(cur => cur.style.color = 'purple');
