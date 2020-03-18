@@ -86,10 +86,40 @@ for (const cur of boxesArr){
 }
 
 */
-
+/*
 const h = document.querySelector('h1');
 const boxes = document.querySelectorAll('.box');
 
 const all = [h, ...boxes];
 
 Array.from(all).forEach(cur => cur.style.color = 'purple');
+*/
+
+const question = new Map();
+
+question.set ('question', 'What is the official name of the latest major JS version?');
+
+question.set(1, 'ES5');
+question.set(2, 'ES6');
+question.set(3, 'ES2015');
+question.set(4, 'ES7');
+
+question.set('correct', 3);
+question.set(true, 'Correct answer');
+question.set(false, 'Wrong answer');
+
+console.log(question.get('question'));
+
+// for of loop with destructuring
+// for( let [key, value] of question.entries()) {
+//   console.log(key + ': ' + value);
+// }
+
+for( let [key, value] of question.entries()) {
+  if (typeof(key) === 'number'){
+    console.log(key + ': ' + value);
+  }
+}
+
+const answer  = parseInt(prompt('Enter your answer..'));
+console.log(question.get(answer === question.get('correct')));
