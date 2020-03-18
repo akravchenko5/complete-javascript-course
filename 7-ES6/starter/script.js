@@ -369,7 +369,7 @@ function reportParks(p) {
 
   //average age
   const ages  = p.map(el => new Date().getFullYear() - el.buildYear);
-  const [totalAge, avgAge] = calc(ages);
+  const [totalAge, avgAge] = calc(ages); // destructing
   console.log(`Our ${p.length} parks have an of ${avgAge} years`);
 
   //which park has more than 1000
@@ -382,7 +382,7 @@ function reportStreets(s){
   console.log("-----------Streets Report---------")
 
   // total and average lengths of the streets
-  const [totalLength, avgLength] = calc(s.map(el => el.length));
+  const [totalLength, avgLength] = calc(s.map(el => el.length));// destructing
   console.log(`Our ${s.length} streets have a total length ${totalLength.toFixed(2)} km with an average length ${avgLength.toFixed(2)} km`)
   // classify sizes
   s.forEach(el => el.classifyStreet());
