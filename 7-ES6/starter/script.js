@@ -155,31 +155,145 @@ console.log(athlete.calculateAge());
 
 //ES6
 
-class Person {
-  constructor (name, yearOfBirth){
+// class Person {
+//   constructor (name, yearOfBirth){
+//     this.name = name;
+//     this.yearOfBirth = yearOfBirth;
+//   }
+
+//   calculateAge() {
+//     const age = new Date().getFullYear() - this.yearOfBirth;
+//     console.log(age);
+//   }
+// }
+
+
+// class Athlete extends Person {
+//   constructor (name, yearOfBirth, medals) {
+//     super(name, yearOfBirth);
+//     this.medals = medals;
+//   }
+
+//   showMedals() {
+//     console.log(this.medals);
+//   }
+// }
+
+// const athlete = new Athlete ('Alex', 1983, 10);
+
+// athlete.calculateAge();
+// athlete.showMedals();
+
+class Element {
+  constructor (name, buildYear){
     this.name = name;
-    this.yearOfBirth = yearOfBirth;
-  }
-
-  calculateAge() {
-    const age = new Date().getFullYear() - this.yearOfBirth;
-    console.log(age);
+    this.buildYear = buildYear;
   }
 }
 
-
-class Athlete extends Person {
-  constructor (name, yearOfBirth, medals) {
-    super(name, yearOfBirth);
-    this.medals = medals;
+class Park extends Element {
+  constructor (name, buildYear, area, treesNumber) {
+    super(name, buildYear);
+    this.area = area;
+    this.treesNumber = treesNumber;
   }
 
-  showMedals() {
-    console.log(this.medals);
+  density() {
+    return (this.treesNumber / this.area).toFixed(2);
+  }
+
+  moreThan1000 () {
+    return this.treesNumber > 1000;
+  }
+
+  age () {
+    return new Date().getFullYear() - this.buildYear;
   }
 }
 
-const athlete = new Athlete ('Alex', 1983, 10);
+class Street extends Element {
+  constructor(name, buildYear, length, size = 'normal'){
+    super(name, buildYear);
+    this.length = length;
+    this.size = size;
+  }
+  getLength() {
+    return this.length;
+  }
+}
+// all parks objects
+const allParks = [];
 
-athlete.calculateAge();
-athlete.showMedals();
+for (let index = 0; index < 4; index++) {
+  let randomArea = Math.floor(Math.random() * 200);
+  let randomTree = Math.floor(Math.random() * 2000);
+  allParks.push(new Park(`Park${index+1}`, 2015 + index, randomArea, randomTree));
+}
+
+//all streets objects
+const allStreets = [];
+
+for (let index = 0; index < 3; index++) {
+  let sizes  = ['tiny', 'small', 'normal', 'big', 'huge'];
+  let randomSize = sizes[Math.floor(Math.random() * 5)];
+  let randomLength = Math.floor(Math.random() * 2000);
+  allStreets.push(new Street(`Street${index+1}`, 2015 + index, randomLength, randomSize));
+}
+
+
+function averageAge (allParks){
+  let average = 0;
+
+  const allAges = allParks.map((el) => {
+    return el.age();
+  })
+
+  for (let cur of allAges){
+    average += cur;
+  }
+  console.log(`Our ${allParks.length} Parks has average age of: ${average / allAges.length}`);
+}
+
+function displayParkDensity(allParks){
+  allParks.forEach((park) => {
+    console.log(`${park.name} has a tree density of ${park.density()} per square km`);
+  })
+}
+
+function isMoreThan100(allParks){
+  allParks.forEach((park) => {
+    if(park.moreThan1000()){
+      console.log(`${park.name} has more than 1000 trees`);
+    }
+  })
+}
+
+function lengths (allStreets){
+  let total = 0
+  const allLengths = allStreets.map((el) => {
+    return el.getLength();
+  })
+
+  for (let cur of allLengths){
+    total += cur;
+  }
+  console.log(`Our ${allStreets.length} streets a total length: ${total} km, with an average ${total / allStreets.length} km`);
+}
+
+function displayAllStreets (allStreets){
+  allStreets.forEach((el)=> {
+    console.log(`${el.name}, build in ${el.buildYear}, is a ${el.size}`)
+  })
+}
+
+
+console.log("---------Parks report---------")
+// console.log(allParks);
+averageAge(allParks);
+displayParkDensity(allParks);
+isMoreThan100(allParks);
+
+console.log("---------Streets report------")
+lengths(allStreets);
+displayAllStreets(allStreets);
+
