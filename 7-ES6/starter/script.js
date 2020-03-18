@@ -95,6 +95,7 @@ const all = [h, ...boxes];
 Array.from(all).forEach(cur => cur.style.color = 'purple');
 */
 
+/*
 const question = new Map();
 
 question.set ('question', 'What is the official name of the latest major JS version?');
@@ -123,3 +124,62 @@ for( let [key, value] of question.entries()) {
 
 const answer  = parseInt(prompt('Enter your answer..'));
 console.log(question.get(answer === question.get('correct')));
+
+*/
+
+/*
+//ES 5 - classes and inheritance
+var Person = function (name, job, yearOfBirth) {
+  this.name = name;
+  this.job = job;
+  this.yearOfBirth = yearOfBirth;
+}
+
+Person.prototype.calculateAge = function(){
+  var age = new Date().getFullYear() - this.yearOfBirth;
+  console.log(age);
+}
+
+
+var Athlete = function(name, job, yearOfBirth, olympicGames) {
+  Person.call(this, name, job, yearOfBirth);
+  this.olympicGames = olympicGames;
+}
+
+Athlete.prototype = Object.create(Person.prototype);
+
+var athlete = new Athlete('alex', 'programmer', 1983, 'No olympic');
+
+console.log(athlete.calculateAge());
+*/
+
+//ES6
+
+class Person {
+  constructor (name, yearOfBirth){
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+  }
+
+  calculateAge() {
+    const age = new Date().getFullYear() - this.yearOfBirth;
+    console.log(age);
+  }
+}
+
+
+class Athlete extends Person {
+  constructor (name, yearOfBirth, medals) {
+    super(name, yearOfBirth);
+    this.medals = medals;
+  }
+
+  showMedals() {
+    console.log(this.medals);
+  }
+}
+
+const athlete = new Athlete ('Alex', 1983, 10);
+
+athlete.calculateAge();
+athlete.showMedals();
