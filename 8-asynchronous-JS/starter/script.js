@@ -105,6 +105,11 @@ const getRelated = publisher =>{
 // }
 
 // getRecipesAW().then(rec => console.log(rec));
+
+
+
+// AJAX - which fetch and Promises
+/*
 function getWeather(woeid) {
   fetch(`https://www.metaweather.com/api/location/${woeid}/`) // returns Promise
   .then(result => {
@@ -119,7 +124,26 @@ function getWeather(woeid) {
   .catch(error => {
     console.log(error);
   })
-}
+};
+*/
 
-getWeather(2487956);
-getWeather(44418);
+
+// AJAX - which fetch and Async/Await
+async function getWeather(woeid){
+  try {
+    const result = await fetch(`https://www.metaweather.com/api/location/${woeid}/`);
+    const data = await result.json();
+    const tomorrow = data.consolidated_weather[1];
+    console.log(`Temperature in ${data.title} stay between ${tomorrow.min_temp} and ${tomorrow.max_temp}`);
+    return data;
+  } catch (error){
+    alert(error);
+  };
+};
+
+let londonData;
+// getWeather(2487956).then(data => console.log(data));
+getWeather(44418).then(data => {
+  londonData = data;
+  console.log(londonData);
+});
