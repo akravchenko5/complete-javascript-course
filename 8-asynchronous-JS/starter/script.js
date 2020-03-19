@@ -94,14 +94,32 @@ const getRelated = publisher =>{
 //   console.log(recipe);
 // })
 
-async function getRecipesAW () {
-  const IDs = await getIDs;
-  console.log(IDs);
-  const recipe = await getRecipe(IDs[2]);
-  console.log(recipe);
-  const related = await getRelated('John');
-  console.log(related);
-  return recipe;
+// async function getRecipesAW () {
+//   const IDs = await getIDs;
+//   console.log(IDs);
+//   const recipe = await getRecipe(IDs[2]);
+//   console.log(recipe);
+//   const related = await getRelated('John');
+//   console.log(related);
+//   return recipe;
+// }
+
+// getRecipesAW().then(rec => console.log(rec));
+function getWeather(woeid) {
+  fetch(`https://www.metaweather.com/api/location/${woeid}/`) // returns Promise
+  .then(result => {
+    // console.log(result);
+    return result.json(); // also returns Promise
+  })
+  .then(data => {
+    // console.log(data);
+    const today = data.consolidated_weather[0];
+    console.log(`Temperature in ${data.title} stay between ${today.min_temp} and ${today.max_temp}`);
+  })
+  .catch(error => {
+    console.log(error);
+  })
 }
 
-getRecipesAW().then(rec => console.log(rec));
+getWeather(2487956);
+getWeather(44418);
