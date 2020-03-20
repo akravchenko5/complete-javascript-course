@@ -1,0 +1,16 @@
+{
+  "presets": [  // collection of code transform plugins
+      ["@babel/env", { //preset based on environment
+          "useBuiltIns": "usage",
+          "corejs": "3",
+          "targets": { // which environments (browsers)
+              "browsers": [
+                // by this line Babel will automatically know which ES6 futures need to be convert in order to work
+                // in the last 5 versions of browser
+                "last 5 versions", 
+                "ie >= 8"
+              ]
+          }
+      }]
+  ]
+}
