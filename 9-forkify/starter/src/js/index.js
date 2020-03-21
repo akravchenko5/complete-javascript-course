@@ -36,7 +36,8 @@ const controlSearch = async () => {
       clearLoader();
       searchView.renderResults(state.search.result);
     } catch(error){
-      alert('Error processing all recipes... :(')
+      alert('Error processing all recipes... :(');
+      clearLoader();
     }
   }
 };
@@ -69,9 +70,9 @@ const controlRecipe = async () => {
     state.recipe = new Recipe(id);
 
     try {
-      // 3. Get recipe data
+      // 3. Get recipe data and parse ingredients 
       await state.recipe.getRecipe();
-  
+      state.recipe.parseIngredients();
       // 4. Calculate time and servings
       state.recipe.calcTime();
       state.recipe.calcServing();
