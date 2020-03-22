@@ -1,4 +1,4 @@
-import {elements} from './base';
+import { elements } from './base';
 
 export const getInput = () => elements.searchInput.value;
 
@@ -14,7 +14,7 @@ export const clearResults = () => {
 /**
  * 'Pasta with tomato and spinach'
  * acc: 0 / acc + cur.length = 5 / newTitle = ['Pasta']
- * update accumulator / return acc + cur.length - this works in a reduce() function by a returning a value, so the value we 
+ * update accumulator / return acc + cur.length - this works in a reduce() function by a returning a value, so the value we
  * return in each iteration of this loop and call back function of reduce method will be the new accumulator
  * acc: 5 / acc + cur.length = 9 / newTitle = ['Pasta', 'with']
  * acc: 9 / acc + cur.length = 15 / newTitle = ['Pasta', 'with', 'tomato']
@@ -24,9 +24,10 @@ export const clearResults = () => {
 
 const limitRecipeTitle = (title, limit = 17) => {
   const newTitle = []; // we can use const because adding staff to an array is not actually mutating variable, same for objects
-  if (title.length > 17){
-    title.split(' ').reduce((acc, cur) => { // reduce call back function which accepts two arguments, accumulator and current element
-      if(acc + cur.length <= limit) {
+  if (title.length > 17) {
+    title.split(' ').reduce((acc, cur) => {
+      // reduce call back function which accepts two arguments, accumulator and current element
+      if (acc + cur.length <= limit) {
         newTitle.push(cur);
       }
       return acc + cur.length;
@@ -38,8 +39,7 @@ const limitRecipeTitle = (title, limit = 17) => {
 };
 
 const renderRecipe = recipe => {
-  const markup = 
-  `
+  const markup = `
     <li>
       <a class="results__link" href="#${recipe.recipe_id}">
           <figure class="results__fig">
@@ -57,10 +57,14 @@ const renderRecipe = recipe => {
 
 // type: 'prev' or 'next'
 const createButton = (page, type) => `
-  <button class="btn-inline results__btn--${type}" data-goto=${type == 'prev' ? page - 1 : page + 1}>
+  <button class="btn-inline results__btn--${type}" data-goto=${
+  type == 'prev' ? page - 1 : page + 1
+}>
     <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
     <svg class="search__icon">
-        <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+        <use href="img/icons.svg#icon-triangle-${
+          type === 'prev' ? 'left' : 'right'
+        }"></use>
     </svg>
   </button>
 `;
@@ -70,7 +74,7 @@ const createButton = (page, type) => `
 const renderButtons = (page, numResults, resPerPage) => {
   const pages = Math.ceil(numResults / resPerPage); // rounded to the NEXT Integer
   let button;
-  
+
   if (page === 1 && pages > 1) {
     // Only button to the Next page
     button = createButton(page, 'next');
@@ -79,7 +83,7 @@ const renderButtons = (page, numResults, resPerPage) => {
     button = `
       ${createButton(page, 'next')}
       ${createButton(page, 'prev')}
-    `
+    `;
   } else if (page === pages && pages > 1) {
     // Only button to the Previous page
     button = createButton(page, 'prev');
@@ -89,9 +93,9 @@ const renderButtons = (page, numResults, resPerPage) => {
 
 export const renderResults = (recipes, page = 1, resPerPage = 10) => {
   // render results of current page
-  const start = (page -1) * resPerPage; // page1 = 0, page2 = 10, page3 = 20;
+  const start = (page - 1) * resPerPage; // page1 = 0, page2 = 10, page3 = 20;
   const end = page * resPerPage;
-  recipes.slice(start, end).forEach(renderRecipe); // forEach will automatically pass current recipe to renderRecipe() 
+  recipes.slice(start, end).forEach(renderRecipe); // forEach will automatically pass current recipe to renderRecipe()
 
   // render pagination buttons
   renderButtons(page, recipes.length, resPerPage);
