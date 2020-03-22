@@ -1,7 +1,8 @@
-import Search from "./models/Search";
-import Recipe from "./models/Recipe";
-import * as searchView from "./views/searchView";
-import { elements, renderLoader, clearLoader } from "./views/base";
+import Search from './models/Search';
+import Recipe from './models/Recipe';
+import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
+import { elements, renderLoader, clearLoader } from './views/base';
 
 /**
  * Global state of out app
@@ -34,19 +35,19 @@ const controlSearch = async () => {
       clearLoader();
       searchView.renderResults(state.search.result);
     } catch (error) {
-      alert("Error processing all recipes... :(");
+      alert('Error processing all recipes... :(');
       clearLoader();
     }
   }
 };
 
-elements.searchForm.addEventListener("submit", e => {
+elements.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   controlSearch();
 });
 
-elements.searchResPages.addEventListener("click", e => {
-  const button = e.target.closest(".btn-inline");
+elements.searchResPages.addEventListener('click', e => {
+  const button = e.target.closest('.btn-inline');
   if (button) {
     const goToPage = parseInt(button.dataset.goto, 10);
     searchView.clearResults();
@@ -58,11 +59,12 @@ elements.searchResPages.addEventListener("click", e => {
 
 const controlRecipe = async () => {
   // get ID from url
-  const id = window.location.hash.replace("#", "");
+  const id = window.location.hash.replace('#', '');
 
   if (id) {
     // 1. Prepare UI for changes
-
+    recipeView.clearRecipe();
+    renderLoader(elements.recipe);
     // 2. Create new recipe
     state.recipe = new Recipe(id);
 
@@ -70,18 +72,20 @@ const controlRecipe = async () => {
       // 3. Get recipe data and parse ingredients
       await state.recipe.getRecipe();
       state.recipe.parseIngredients();
+
       // 4. Calculate time and servings
       state.recipe.calcTime();
       state.recipe.calcServing();
 
       // 5. Render recipe
-      // console.log(state.recipe);
+      clearLoader();
+      recipeView.renderRecipe(state.recipe);
     } catch (error) {
-      alert("Error processing recipe ...");
+      alert('Error processing recipe ...');
     }
   }
 };
 
-["hashchange", "load"].forEach(event =>
+['hashchange', 'load'].forEach(event =>
   window.addEventListener(event, controlRecipe)
 );
