@@ -7,9 +7,7 @@ export default class Recipe {
 
   async getRecipe() {
     try {
-      const res = await axios(
-        `https://forkify-api.herokuapp.com/api/get?rId=${this.id}`
-      );
+      const res = await axios(`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
       const recipe = res.data.recipe;
       this.title = recipe.title;
       this.author = recipe.publisher;
@@ -35,31 +33,12 @@ export default class Recipe {
   }
 
   parseIngredients() {
-    const unitsLong = [
-      'tablespoons',
-      'tablespoon',
-      'ounce',
-      'ounces',
-      'teaspoon',
-      'teaspoons',
-      'cups',
-      'pounds'
-    ];
-    const unitShort = [
-      'tbsp',
-      'tbsp',
-      'oz',
-      'oz',
-      'tsp',
-      'tsp',
-      'cup',
-      'pound'
-    ];
+    const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
+    const unitShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
     const units = [...unitShort, 'kg', 'g'];
     const newIngredients = this.ingredients.map(el => {
       // 1. Uniform units
       let ingredient = el.toLowerCase();
-      // console.log(ingredient);
       unitsLong.forEach((unit, i) => {
         ingredient = ingredient.replace(unit, unitShort[i]);
       });
@@ -79,7 +58,7 @@ export default class Recipe {
         const arrCount = arrIng.slice(0, unitIndex);
         let count;
         if (arrCount === 1) {
-          count = eval(arrIng[0].join('+'));
+          count = eval(arrIng[0].replace('-', '+'));
         } else {
           count = eval(arrIng.slice(0, unitIndex).join('+')); // eval(), evaluates string as a JS code
         }
