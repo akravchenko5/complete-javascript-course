@@ -65,19 +65,23 @@ const controlRecipe = async () => {
     // 1. Prepare UI for changes
     recipeView.clearRecipe();
     renderLoader(elements.recipe);
-    // 2. Create new recipe
+
+    // 2. Highlight selected search item
+    if (state.search) searchView.highlightSelected(id);
+
+    // 3. Create new recipe
     state.recipe = new Recipe(id);
 
     try {
-      // 3. Get recipe data and parse ingredients
+      // 4. Get recipe data and parse ingredients
       await state.recipe.getRecipe();
       state.recipe.parseIngredients();
 
-      // 4. Calculate time and servings
+      // 5. Calculate time and servings
       state.recipe.calcTime();
       state.recipe.calcServing();
 
-      // 5. Render recipe
+      // 6. Render recipe
       clearLoader();
       recipeView.renderRecipe(state.recipe);
     } catch (error) {
