@@ -14,9 +14,7 @@ export const clearResults = () => {
 export const highlightSelected = id => {
   const resultArr = Array.from(document.querySelectorAll('.results__link'));
   resultArr.forEach(el => el.classList.remove('results__link--active'));
-  document
-    .querySelector(`a[href="#${id}"]`)
-    .classList.add('results__link--active');
+  document.querySelector(`.results__link[href="#${id}"]`).classList.add('results__link--active');
 };
 
 /**
@@ -30,9 +28,9 @@ export const highlightSelected = id => {
  * acc: 18 / acc + cur.length = 24 / newTitle = ['Pasta', 'with', 'tomato']
  */
 
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
   const newTitle = []; // we can use const because adding staff to an array is not actually mutating variable, same for objects
-  if (title.length > 17) {
+  if (title.length > limit) {
     title.split(' ').reduce((acc, cur) => {
       // reduce call back function which accepts two arguments, accumulator and current element
       if (acc + cur.length <= limit) {
@@ -65,14 +63,10 @@ const renderRecipe = recipe => {
 
 // type: 'prev' or 'next'
 const createButton = (page, type) => `
-  <button class="btn-inline results__btn--${type}" data-goto=${
-  type == 'prev' ? page - 1 : page + 1
-}>
+  <button class="btn-inline results__btn--${type}" data-goto=${type == 'prev' ? page - 1 : page + 1}>
     <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
     <svg class="search__icon">
-        <use href="img/icons.svg#icon-triangle-${
-          type === 'prev' ? 'left' : 'right'
-        }"></use>
+        <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
     </svg>
   </button>
 `;
